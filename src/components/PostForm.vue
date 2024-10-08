@@ -5,7 +5,7 @@ import { ref } from 'vue'
 const name = ref('')
 const email = ref('')
 const userName = ref('')
-const response = ref(null)
+const userResponse = ref(null)
 
 const submitForm = async () => {
   try {
@@ -14,11 +14,10 @@ const submitForm = async () => {
       email: email.value,
       userName: userName.value
     })
-    response.value = response.data
+    userResponse.value = response.data
     name.value = ''
     email.value = ''
     userName.value = ''
-    response.value = true
   } catch (error) {
     console.error('Failed to post user data', error)
   }
@@ -47,11 +46,11 @@ const submitForm = async () => {
       <button type="submit" class="submit-btn">Submit</button>
     </form>
 
-    <div v-if="response" class="response-message">
+    <div v-if="userResponse" class="response-message">
       <h3>User Created Successfully:</h3>
-      <p><strong>Name:</strong> {{ response.name }}</p>
-      <p><strong>Email:</strong> {{ response.email }}</p>
-      <p><strong>userName:</strong> {{ response.userName }}</p>
+      <p><strong>Name:</strong> {{ userResponse.name }}</p>
+      <p><strong>Email:</strong> {{ userResponse.email }}</p>
+      <p><strong>username:</strong> {{ userResponse.userName }}</p>
     </div>
   </div>
 </template>
@@ -113,6 +112,8 @@ input {
   background-color: #e8f5e9;
   border: 1px solid #4caf50;
   border-radius: 4px;
+  font-style: italic;
+  font-size: smaller;
 }
 
 .response-message h3 {
