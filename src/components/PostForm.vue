@@ -1,67 +1,59 @@
 <script setup>
-import { ref } from 'vue'
 import axios from 'axios'
+import { ref } from 'vue'
 
-// const title = ref('')
-// const body = ref('')
-// const response = ref(null)
-const userFirstName = ref([])
-const userLastName = ref([])
+const name = ref('')
 const email = ref('')
-const user = ref('')
+const userName = ref('')
+const response = ref(null)
 
-// const submitPost = async () => {
-//   try {
-//     const res = await axios.post('https://jsonplaceholder.typicode.com/posts', {
-//       title: title.value,
-//       body: body.value,
-//       userId: 1
-//     })
-//     response.value = res.data
-//     title.value = ''
-//     body.value = ''
-//   } catch (error) {
-//     console.error('There was an error!', error)
-//   }
-// }
-
-const submitUser = async () => {
+const submitForm = async () => {
   try {
-    const res = await axios.post('https://jsonplaceholder.typicode.com/posts', {
-      firstName: userFirstName.value,
-      lastName: userLastName.value,
-      email: email.value
+    const response = await axios.post('https://jsonplaceholder.typicode.com/users', {
+      name: name.value,
+      email: email.value,
+      userName: userName.value
     })
-    user.value = res.data
-    const fullName = `${user.value.firstName} ${user.value.lastName}`
-    userFirstName.value = ''
-    userLastName.value = ''
+    response.value = response.data
+    name.value = ''
     email.value = ''
-    return fullName
+    userName.value = ''
+    response.value = true
   } catch (error) {
-    console.error('There was an error!', error)
+    console.error('Failed to post user data', error)
   }
 }
 </script>
 
 <template>
-  <!-- <div>
-    <form @submit.prevent="submitPost">
-      <input v-model="title" placeholder="Title" required />
-      <textarea v-model="body" placeholder="Body" required></textarea>
-      <button type="submit">Submit Post</button>
+  <div class="form-container">
+    <h2>Create User</h2>
+    <form @submit.prevent="submitForm" class="user-form">
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" v-model="name" id="name" />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" v-model="email" id="email" />
+      </div>
+
+      <div class="form-group">
+        <label for="userName">Username:</label>
+        <input type="text" v-model="userName" id="userName" />
+      </div>
+
+      <button type="submit" class="submit-btn">Submit</button>
     </form>
-    <p v-if="response">Response: {{ response }}</p>
-  </div> -->
-  <div>
-    <form @submit.prevent="submitUser">
-      <input type="text" placeholder="First name" v-model="firstName" />
-      <input type="text" placeholder="last name" v-model="lastName" />
-      <input type="email" placeholder="email address" v-model="email" />
-      <button type="submit">Submit Post</button>
-    </form>
+
+    <div v-if="response" class="response-message">
+      <h3>User Created Successfully:</h3>
+      <p><strong>Name:</strong> {{ response.name }}</p>
+      <p><strong>Email:</strong> {{ response.email }}</p>
+      <p><strong>userName:</strong> {{ response.userName }}</p>
+    </div>
   </div>
-  <p v-if="fullName">User Name: {{ fullName }}</p>
 </template>
 
 <style scoped>
@@ -69,34 +61,61 @@ const submitUser = async () => {
   max-width: 400px;
   margin: 0 auto;
   padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
   background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-form {
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.user-form {
   display: flex;
   flex-direction: column;
 }
 
-input,
-textarea {
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+.form-group {
+  margin-bottom: 15px;
 }
 
-button {
-  padding: 10px;
-  border: none;
+label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
   border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.submit-btn {
+  padding: 10px;
   background-color: #007bff;
   color: white;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
 }
 
-button:hover {
+.submit-btn:hover {
   background-color: #0056b3;
+}
+
+.response-message {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #e8f5e9;
+  border: 1px solid #4caf50;
+  border-radius: 4px;
+}
+
+.response-message h3 {
+  margin-bottom: 10px;
 }
 </style>
